@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -18,27 +18,61 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+ class Person{
+	private String Date;
+	private String Name;
+	private String Company;
+	
+	
+	
+	public Person(String date, String name, String company) {
+		
+		this.Date = date;
+		this.Name = name;
+		this.Company = company;
+		
+	}
+	
+	
+	public String getDate() {
+		return this.Date;
+	}
+	
+	public String getName() {
+		return this.Name;
+	}
+	
+	public String getCompany() {
+		return this.Company;
+	}
+	
+	
+	@Override   //this is to override the default way of printing out the objects with new function toString
+	public String toString() {
+        return ("Date:"+this.getDate()+
+                " Name: "+ this.getName() +
+                " Company: "+ this.getCompany() 
+                );
+	}
+	
+}
 
 public class DataGUI extends JDialog implements ActionListener {
-
 	
 
-	static List<String> records = new ArrayList<String>();
-	static List<String> green = new ArrayList<String>();
-	static List<String> yellow = new ArrayList<String>();
-	static List<String> blue = new ArrayList<String>();
-	static List<String> indigo = new ArrayList<String>();
-	static List<String> red = new ArrayList<String>();
-	static List<String> violet = new ArrayList<String>();
-	static List<String> orange = new ArrayList<String>();
+	
+	static ArrayList<Person> record = new ArrayList<Person>();
 
-
-
-
+	static List<Person> green = new ArrayList<Person>();
+	static List<Person> yellow = new ArrayList<Person>();
+	static List<Person> blue = new ArrayList<Person>();
+	static List<Person> indigo = new ArrayList<Person>();
+	static List<Person> red = new ArrayList<Person>();
+	static List<Person> violet = new ArrayList<Person>();
+	static List<Person> orange = new ArrayList<Person>();
+	
 
 	static BufferedReader reader;
-	
-
 	
 	private JFrame frame;
 
@@ -51,11 +85,6 @@ public class DataGUI extends JDialog implements ActionListener {
 	JButton button6;
 	JButton button7;
 
-
-
-
-
-	
 	
 	public DataGUI(){
 		frame = new JFrame();
@@ -79,11 +108,6 @@ public class DataGUI extends JDialog implements ActionListener {
 	       button7 = new JButton("Orange");
 
 
-
-
-
-	       
-	       
 	       button2.addActionListener(this);
 	       button2.setActionCommand("yellow");
 	       button2.setOpaque(true);
@@ -122,6 +146,8 @@ public class DataGUI extends JDialog implements ActionListener {
 	       button7.setOpaque(true);
 	       button7.setBackground(Color.ORANGE);
 	       
+	       
+	       
 	       panel.add(button1);
 	       panel.add(button2);
 	       panel.add(button3);
@@ -145,33 +171,100 @@ public class DataGUI extends JDialog implements ActionListener {
 	
 	
 	public static void Read() throws IOException {
-		 reader = new BufferedReader(new InputStreamReader(new FileInputStream("/Users/anthonymatos/eclipse-workspace/Data-Proj/src/project-data.txt")));
-
-		 String currentLine = reader.readLine();
+		 reader = new BufferedReader(new InputStreamReader(new FileInputStream("/Users/anthonymatos/git/Projects-/Data-Proj/src/project-data.txt")));
+				 String currentLine = reader.readLine();
 		 
-
+			String f1 ="";
+			String f2 = "";
+			String f3 = "";	
+		 
 			while (currentLine != null)
 			{
+				
+				if(currentLine.contains("Date:")) {
+					if(currentLine.substring(0, 5).equals("Date:")) {
+						f1 = currentLine.substring(5, currentLine.length());
+					}
+				}
+				
+				
 
-				 if(currentLine.equals(" ") || !currentLine.equals(" ")) {
-					 
-					 
-					 
-					 //DataGUI record = new DataGUI();
-					 records.add(currentLine);
-					 //record.add(currentLine);
-					  
-					currentLine = reader.readLine();
+				if(currentLine.contains("Name:")) {
+					if(currentLine.substring(0, 5).equals("Name:")) {
+						f2 = currentLine.substring(5, currentLine.length());
+						//System.out.println(""+f2);
+					}
+				}
+				
+				
+				if(currentLine.contains("Company:")) {
+					if(currentLine.substring(0, 8).equals("Company:")) {
+						f3 = currentLine.substring(8, currentLine.length());
+					}
+				}
+				
+				if(currentLine.contains("Color:")) {
+					if(currentLine.substring(0, 6).contentEquals("Color:")) {
+						String color = currentLine.substring(6, currentLine.length());
+						
+						Person emp = new Person(f1,f2,f3);
+						
+						record.add(emp);
+						
+						addObj(color,emp);
+
+					}
 					
-					//System.out.println(records.get(0));
-				 }
+				}
+				
+
+				currentLine = reader.readLine();
+				
 
 			}
-		
+			
+			
 
 	}
 	
 	
+
+
+
+
+
+
+	private static void addObj(String color, Person emp) {
+		// TODO Auto-generated method stub
+		
+		if(color.contentEquals("green")) {
+			green.add(emp);
+		}
+		if(color.contentEquals("yellow")) {
+			yellow.add(emp);
+		}
+		
+		if(color.contentEquals("blue")) {
+			blue.add(emp);
+		}
+		if(color.contentEquals("indigo")) {
+			indigo.add(emp);
+		}
+		
+		if(color.contentEquals("red")) {
+			red.add(emp);
+		}
+		
+		if(color.contentEquals("violet")) {
+			violet.add(emp);
+		}
+		
+		if(color.contentEquals("orange")) {
+			orange.add(emp);
+		}
+		
+	}
+
 
 
 	public static void main(String[] args) throws IOException {
@@ -183,55 +276,6 @@ public class DataGUI extends JDialog implements ActionListener {
 		new DataGUI();
 
 		
-		for(int x=0; x<records.size(); x++) {
-			if(records.get(x).equals("Color:green") ) {
-				green.add(records.get(x-1));
-				green.add(records.get(x-2));
-				green.add(records.get(x-3));
-				
-			}
-			if(records.get(x).equals("Color:yellow")) {
-				yellow.add(records.get(x-1));
-				yellow.add(records.get(x-2));
-				yellow.add(records.get(x-3));
-			}
-			
-			if(records.get(x).equals("Color:blue")) {
-				blue.add(records.get(x-1));
-				blue.add(records.get(x-2));
-				blue.add(records.get(x-3));
-			}
-			
-			if(records.get(x).equals("Color:indigo")) {
-				indigo.add(records.get(x-1));
-				indigo.add(records.get(x-2));
-				indigo.add(records.get(x-3));
-			}
-			if(records.get(x).equals("Color:red")) {
-				red.add(records.get(x-1));
-				red.add(records.get(x-2));
-				red.add(records.get(x-3));
-			}
-			if(records.get(x).equals("Color:violet")) {
-				violet.add(records.get(x-1));
-				violet.add(records.get(x-2));
-				violet.add(records.get(x-3));
-			}
-			if(records.get(x).equals("Color:orange")) {
-				orange.add(records.get(x-1));
-				orange.add(records.get(x-2));
-				orange.add(records.get(x-3));
-			}
-		}
-		
-
-		
-		//for(int j=0; j<yellow.size(); j++) {
-		//	System.out.println(yellow.get(j));
-		//}
-
- 
-		
 		//System.out.println(new File(".").getAbsolutePath());
 	}
 
@@ -239,10 +283,12 @@ public class DataGUI extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
+		
+		
+		
+		
 		if("green".equals(e.getActionCommand())) {
-			
-
-			
+		
 			DialogLists.showDialog(frame, button1,  "Names in the green category:", "Name Chooser", green);
 
 		}
@@ -251,6 +297,7 @@ public class DataGUI extends JDialog implements ActionListener {
 			DialogLists.showDialog(frame, button2,  "Names in the yellow category:", "Name Chooser", yellow);
 		}
 
+		
 		if("blue".equals(e.getActionCommand())) {
 			DialogLists.showDialog(frame, button3,  "Names in the blue category:", "Name Chooser", blue);
 		}
@@ -269,9 +316,14 @@ public class DataGUI extends JDialog implements ActionListener {
 		if("orange".equals(e.getActionCommand())) {
 			DialogLists.showDialog(frame, button7,  "Names in the orange category:", "Name Chooser", orange);
 		}
+		
 
 		
 	}
+
+
+
+
 
 
 }
